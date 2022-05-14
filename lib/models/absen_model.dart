@@ -36,6 +36,7 @@ class Absen {
   String time = "";
   String role = "";
   String photo = "";
+  String location = "";
   User? user;
 
   Absen(
@@ -44,6 +45,7 @@ class Absen {
       required this.time,
       required this.role,
       required this.photo,
+      required this.location,
       this.user});
 
   Absen.fromJson(Map<String, dynamic> json) {
@@ -52,6 +54,7 @@ class Absen {
     time = json['time'];
     role = json['role'];
     photo = json['photo'];
+    location = json['location'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 
@@ -62,7 +65,8 @@ class Absen {
     data['time'] = time;
     data['role'] = role;
     data['photo'] = photo;
-    if (this.user != null) {
+    data['location'] = location;
+    if (user != null) {
       data['user'] = user!.toJson();
     }
     return data;

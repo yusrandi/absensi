@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 Widget chatTile(
     String imgUrl, String userName, String msg, String date, bool seen) {
@@ -28,7 +27,7 @@ Widget chatTile(
                     Expanded(
                       child: Text(
                         userName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
                         ),
@@ -37,14 +36,16 @@ Widget chatTile(
                     Text(msg),
                   ],
                 ),
-                SizedBox(
-                  height: 5.0,
-                ),
+                const SizedBox(height: 5.0),
                 Row(
                   children: [
                     Expanded(child: Text(date)),
-                    Icon(seen ? Icons.check : Icons.close,
-                        color: seen ? Colors.green : Colors.red, size: 20),
+                    Icon(
+                        seen
+                            ? Icons.done_all_rounded
+                            : Icons.remove_done_rounded,
+                        color: seen ? Colors.green : Colors.red,
+                        size: 20),
                   ],
                 ),
               ],

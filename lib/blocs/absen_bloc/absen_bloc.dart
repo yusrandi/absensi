@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_erwin/models/absen_model.dart';
@@ -18,6 +20,19 @@ class AbsenBloc extends Bloc<AbsenEvent, AbsenState> {
         await Future.delayed(const Duration(milliseconds: 30));
         final data = await repository.absenFetchData();
         yield AbsenLoadedState(data);
+      } catch (e) {
+        yield AbsenErrorState(e.toString());
+      }
+    } else if (event is AbsenStoreEvent) {
+      try {
+        yield AbsenLoadingState();
+        await Future.delayed(const Duration(milliseconds: 30));
+        final data = await repository.absenStore(event.file, event.absen);
+        if (data.responsecode == "1") {
+          yield AbsenSuccessState(data.responsemsg);
+        } else {
+          yield AbsenErrorState(data.responsemsg);
+        }
       } catch (e) {
         yield AbsenErrorState(e.toString());
       }

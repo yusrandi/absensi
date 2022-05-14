@@ -9,7 +9,7 @@ import 'package:http_parser/http_parser.dart';
 
 abstract class AbsenRepository {
   Future<AbsenModel> absenFetchData();
-  Future<ResponseModel> absenStore(File? file, Absen absen, String notifId);
+  Future<ResponseModel> absenStore(File? file, Absen absen);
 }
 
 class AbsenRepositoryImpl implements AbsenRepository {
@@ -30,14 +30,13 @@ class AbsenRepositoryImpl implements AbsenRepository {
   }
 
   @override
-  Future<ResponseModel> absenStore(
-      File? file, Absen absen, String notifId) async {
+  Future<ResponseModel> absenStore(File? file, Absen absen) async {
     var request =
         http.MultipartRequest("POST", Uri.parse(Api.instance.absenURL));
 
-    request.fields['user_id'] = absen.userId.toString();
-
-    request.fields['notifikasi_id'] = notifId;
+    request.fields['userId'] = absen.userId.toString();
+    request.fields['role'] = absen.role;
+    request.fields['location'] = absen.location;
 
     if (file != null) {
       final resFile = await http.MultipartFile.fromPath('photo', file.path,

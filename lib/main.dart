@@ -3,10 +3,14 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_erwin/blocs/absen_bloc/absen_bloc.dart';
-import 'package:flutter_erwin/dashboard_screen.dart';
 import 'package:flutter_erwin/repositories/absen_repo.dart';
+import 'package:flutter_erwin/repositories/user_repo.dart';
+import 'package:flutter_erwin/splash_screen.dart';
 import 'package:flutter_erwin/utils/theme.dart';
+
+import 'blocs/user_bloc/user_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +22,23 @@ Future<void> main() async {
   final firstCamera = cameras[1];
 
   runApp(MyApp(camera: firstCamera));
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = true;
 }
 
 class MyApp extends StatelessWidget {
@@ -28,12 +49,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AbsenBloc(AbsenRepositoryImpl()),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Erwin',
-        theme: theme(),
-        home: DashboardScreen(camera: camera),
+      create: (context) => UserBloc(UserRepositoryImpl()),
+      child: BlocProvider(
+        create: (context) => AbsenBloc(AbsenRepositoryImpl()),
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Erwin',
+            theme: theme(),
+            home: SplashScreen(camera: camera),
+            builder: EasyLoading.init()),
       ),
     );
   }

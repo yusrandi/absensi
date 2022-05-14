@@ -8,3 +8,13 @@ abstract class AbsenEvent extends Equatable {
 }
 
 class AbsenFetchData extends AbsenEvent {}
+
+class AbsenStoreEvent extends AbsenEvent {
+  final File? file;
+  final Absen absen;
+
+  const AbsenStoreEvent({this.file, required this.absen});
+
+  @override
+  List<Object> get props => [];
+}
